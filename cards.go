@@ -46,6 +46,18 @@ type Card struct {
 	WishColor   bool
 }
 
+func (c Card) Check(next Card) bool {
+	switch {
+	case next.WishColor:
+		return true
+	case c.Color == next.Color:
+		return true
+	case c.Value == next.Value:
+		return true
+	}
+	return false
+}
+
 type CardStack struct {
 	Cards []Card
 }
@@ -62,6 +74,18 @@ func (cs *CardStack) pop() Card {
 	c = cs.Cards[len(cs.Cards)-1]
 	cs.Cards = cs.Cards[:len(cs.Cards)-1]
 	return c
+}
+
+func (cs *CardStack) popAllowed(c Card) bool {
+	return cs.peek().Check(c)
+}
+
+func (cs *CardStack) peek() Card {
+	var c Card
+	if len(cs.Cards) == 0 {
+		return c
+	}
+	return cs.Cards[len(cs.Cards)-1]
 }
 
 func (cs *CardStack) take(i int) Card {
