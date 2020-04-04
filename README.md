@@ -18,7 +18,7 @@ Auf den Haufen werden die unterschiedlichen Karten abgelegt. Dabei dürfen nur b
 Für die Umsetzung werden verschiedene Events definiert. 
 
 * newGame: Neues Spiel
-* newPlayer: Spieler hinzufügen
+* newPlayer(name): Spieler hinzufügen
 * pushCardToStack: Karte auf den Stapel legen (wird nach dem Mischen der Karten verwendet)
 * setActivePlayer: Spieler am Zug
 * playerReady: Spieler ist fertig mit dem Zug
