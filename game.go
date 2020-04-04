@@ -15,6 +15,11 @@ func newGame() *Game {
 	}
 }
 
+func (g *Game) Shuffle() {
+	g.Stack = CardGame()
+	g.Stack.shuffle()
+}
+
 func (g *Game) Event(e Event) {
 	g.Events = append(g.Events, e)
 }

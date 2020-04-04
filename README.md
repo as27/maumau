@@ -18,10 +18,11 @@ Auf den Haufen werden die unterschiedlichen Karten abgelegt. Dabei dürfen nur b
 Für die Umsetzung werden verschiedene Events definiert. 
 
 - [x] newGame: Neues Spiel
+- [ ] Erste Karte Aufdecken
 - [x] newPlayer(name): Spieler hinzufügen
 - [x] pushCardToStack: Karte auf den Stapel legen (wird nach dem Mischen der Karten verwendet)
 - [ ] setActivePlayer: Spieler am Zug
 - [ ] playerReady: Spieler ist fertig mit dem Zug
-- [ ] popCardFromStack: Spieler nimmt oberste Karte vom Stapel
-- [ ] pushCardToHeap: Spieler legt Karte auf den Haufen
+- [x] popCardFromStack: Spieler nimmt oberste Karte vom Stapel
+- [x] pushCardToHeap: Spieler legt Karte auf den Haufen
 - [ ] gameOver: Spieler hat gewonnen

@@ -64,6 +64,12 @@ func (cs *CardStack) pop() Card {
 	return c
 }
 
+func (cs *CardStack) take(i int) Card {
+	c := cs.Cards[i]
+	cs.Cards = append(cs.Cards[:i], cs.Cards[i+1:]...)
+	return c
+}
+
 func (cs *CardStack) len() int {
 	return len(cs.Cards)
 }
