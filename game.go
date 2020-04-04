@@ -9,7 +9,10 @@ type Game struct {
 }
 
 func newGame() *Game {
-	return nil
+	return &Game{
+		Stack: &CardStack{},
+		Heap:  &CardStack{},
+	}
 }
 
 func (g *Game) Event(e Event) {
@@ -25,6 +28,7 @@ func (g *Game) State() {
 type Event func(g *Game)
 
 type Player struct {
+	ID    string
 	Name  string
-	Cards CardStack
+	Cards *CardStack
 }

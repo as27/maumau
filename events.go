@@ -11,7 +11,7 @@ func startGame() Event {
 		g.Stack = CardGame()
 		g.Stack.shuffle()
 		for _, p := range g.Players {
-			p.Cards = CardStack{Cards: []Card{}}
+			p.Cards = &CardStack{Cards: []Card{}}
 		}
 		for i := 1; i <= g.NrCards; i++ {
 			for _, p := range g.Players {

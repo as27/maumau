@@ -64,6 +64,10 @@ func (cs *CardStack) pop() Card {
 	return c
 }
 
+func (cs *CardStack) len() int {
+	return len(cs.Cards)
+}
+
 func (cs *CardStack) shuffle() {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	r.Shuffle(len(cs.Cards), func(i, j int) {
