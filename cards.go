@@ -17,7 +17,7 @@ func CardGame() *CardStack {
 	for _, c := range colors {
 		for _, v := range values {
 			newCard := Card{
-				ID:          uuid.New(),
+				ID:          uuid.New().String(),
 				Color:       c,
 				Value:       v,
 				SkipPlayers: 0,
@@ -28,7 +28,7 @@ func CardGame() *CardStack {
 		}
 		// every color has a skip next player
 		newCard := Card{
-			ID:          uuid.New(),
+			ID:          uuid.New().String(),
 			Color:       c,
 			Value:       "->",
 			SkipPlayers: 1,
@@ -36,7 +36,7 @@ func CardGame() *CardStack {
 		cs.push(newCard)
 		// every color has a 2+ card
 		newCard = Card{
-			ID:    uuid.New(),
+			ID:    uuid.New().String(),
 			Color: c,
 			Value: "+2",
 			TakeN: 2,
@@ -44,7 +44,7 @@ func CardGame() *CardStack {
 		cs.push(newCard)
 		// wish cards don't need a color or value
 		newCard = Card{
-			ID:        uuid.New(),
+			ID:        uuid.New().String(),
 			WishColor: true,
 		}
 		cs.push(newCard)
@@ -54,7 +54,7 @@ func CardGame() *CardStack {
 
 // Card defines the propperties of a card.
 type Card struct {
-	ID          uuid.UUID
+	ID          string
 	Color       string
 	Value       string // number or name e.g. 1, K, J
 	SkipPlayers int

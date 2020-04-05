@@ -1,5 +1,7 @@
 package main
 
+import "github.com/google/uuid"
+
 func addCardGameToStack(cs *CardStack) Event {
 	return func(g *Game) {
 		g.Stack.Cards = append(cs.Cards, g.Stack.Cards...)
@@ -9,6 +11,9 @@ func addCardGameToStack(cs *CardStack) Event {
 func addPlayer(p *Player) Event {
 	return func(g *Game) {
 		p.Cards = &CardStack{}
+		if p.ID == "" {
+			p.ID = uuid.New().String()
+		}
 		g.Players = append(g.Players, p)
 	}
 }

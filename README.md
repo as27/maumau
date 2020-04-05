@@ -36,3 +36,7 @@ Umsetzung erfolg über HTML
 - [ ] Anbindung an Wesocket
 - [ ] Abfangen von nicht gültigen Zügen
 - [ ] Anmeldebildschirm
+
+## Server
+
+- [ ] 

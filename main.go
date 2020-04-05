@@ -11,10 +11,8 @@ var (
 
 func main() {
 	flag.Parse()
-	s := &server{
-		game: newGame(),
-		port: *flagPort,
-	}
+	s := newServer()
+	s.routes()
 	err := s.run()
 	if err != nil {
 		log.Fatal("error main.s.run():", err)
