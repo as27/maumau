@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+// CardGame defines all availiable cards inside the game.
+// This function is called to generate a stack for the game.
+// Exept for the wish cards, every card needs a value and a color.
 func CardGame() *CardStack {
 	var cs CardStack
 	colors := []string{"rot", "gelb", "grün", "blau"}
@@ -20,16 +23,21 @@ func CardGame() *CardStack {
 			}
 			cs.push(newCard)
 		}
+		// every color has a skip next player
 		newCard := Card{
 			Color:       c,
+			Value:       "->",
 			SkipPlayers: 1,
 		}
 		cs.push(newCard)
+		// every color has a 2+ card
 		newCard = Card{
 			Color: c,
+			Value: "+2",
 			TakeN: 2,
 		}
 		cs.push(newCard)
+		// wish cards don't need a color or value
 		newCard = Card{
 			WishColor: true,
 		}
@@ -38,14 +46,18 @@ func CardGame() *CardStack {
 	return &cs
 }
 
+// Card defines the propperties of a card.
 type Card struct {
-	Color       string // Farbe der Karte
-	Value       string // Zahl der Karte
-	SkipPlayers int    // Anzahl der Spieler die Überspungen werden
-	TakeN       int    // Anzahl der Karten die der nächste Spieler nehmen muss
-	WishColor   bool
+	Color       string
+	Value       string // number or name e.g. 1, K, J
+	SkipPlayers int
+	TakeN       int  // next player has to take this nr of cards
+	WishColor   bool // defines a wish card
 }
 
+// Check validates the next cards due to the rules of the game.
+// In maumau the next card needs the same color or value. Wish cards
+// are allowed to play on every card.
 func (c Card) Check(next Card) bool {
 	switch {
 	case next.WishColor:
@@ -58,6 +70,8 @@ func (c Card) Check(next Card) bool {
 	return false
 }
 
+// CardStack defines a group of cards. The heap, the stack and the cards
+// a player has on his hand are defines as CardStack.
 type CardStack struct {
 	Cards []Card
 }
@@ -88,6 +102,8 @@ func (cs *CardStack) peek() Card {
 	return cs.Cards[len(cs.Cards)-1]
 }
 
+// take returns the i element of the CardStack and removes
+// that from the stack.
 func (cs *CardStack) take(i int) Card {
 	c := cs.Cards[i]
 	cs.Cards = append(cs.Cards[:i], cs.Cards[i+1:]...)

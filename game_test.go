@@ -6,14 +6,24 @@ import (
 )
 
 func TestGameEvents(t *testing.T) {
+	makePlayer := func(name string) *Player {
+		return &Player{Name: name, Cards: &CardStack{}}
+	}
 	g := newGame()
-	g.Shuffle()
-	g.Event(startGame())
-	g.Event(AddPlayer(Player{Name: "Max"}))
-	g.Event(AddPlayer(Player{Name: "Maja"}))
+	cardGame := CardGame()
+	g.InitialEvent(addCardGameToStack(cardGame))
+	g.InitialEvent(addPlayer(makePlayer("Max")))
+	g.InitialEvent(addPlayer(makePlayer("Maja")))
+	g.InitialEvent(serveGame())
+	g.Init()
+	g.State()
 	g.State()
 	if g.Players[0].Name != "Max" {
 		t.Errorf("first player should be Max: got %#v", g.Players[0])
+	}
+	if g.Players[0].Cards.len() != g.NrCards {
+		t.Errorf("Player 0 had %d cards! Expect: %d", g.Players[0].Cards.len(), g.NrCards)
+		t.Errorf("%#v", g.Players[0].Cards)
 	}
 	if g.Stack.len() == 0 {
 		t.Error("stack is empty some cards should be added to the game")
