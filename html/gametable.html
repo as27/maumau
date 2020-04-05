@@ -5,20 +5,27 @@
             body {
                 background-color: beige;
                 color:black;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 }
             .card {
                 float: left;
                 border-radius: 15%;
                 background-color: white;
-                width: 100px;
+                width: 2em;
+                height: 1.5em;
                 text-align: center;
-                margin: 0.5em;
-                padding: 0.5em 0.2em;
-                border: 1px solid black;
-                font-size: 5em;
+                margin: 0.4em 0.15em;
+                padding: 0.6em 0.1em;
+                border: 0.15em solid white;
+                font-size: 3.0em;
                 font-weight: bold;
                 color: white;
+                box-shadow: 0.14em 0.14em 0.2em gray;
             }
+            .card:hover{
+                box-shadow: 1px 1px 0.2em gray;
+            }
+           
             .red {
                 background-color: red;
             }
@@ -31,6 +38,30 @@
             .yellow {
                 background-color: goldenrod;
             }
+            .back {
+                background-color: thistle;
+            }
+            .player {
+                display: block;
+                box-shadow: 0.4em 0.4em 0.8em gray;
+                border: 0.5em solid tan;
+                margin: 1.5em 0;
+                
+            }
+            .game {
+                display: block;
+            }
+
+            .player:after, .game:after{
+                content: "";
+                display:block;
+                clear: left;
+            }
+            .playesr:after {
+                content: "";
+                display: block;
+                clear: left;
+                }
 
         </style>
     </head>
@@ -38,18 +69,19 @@
         <h1>maumau</h1>
         <div class="player oponent">
             <div class="cards">
-                <div class="card red">2</div>
-                <div class="card blue">3</div>
-                <div class="card green">4</div>
-                <div class="card yellow">5</div>
+                <div class="card back"></div>
+                <div class="card back"></div>
+                <div class="card back"></div>
+                <div class="card back"></div>
+                <div class="card back"></div>
             </div>
         </div>
         <div class="game">
             <div id="stack">
-                <div class="card red">2</div>
+                <div class="card back"></div>
             </div>
             <div id="stack">
-                <div class="card red">2</div>
+                <div class="card red">+2</div>
             </div>
         </div>
         <div id="me" class="player">
