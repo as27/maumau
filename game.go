@@ -1,12 +1,12 @@
 package main
 
+// Game defines the logic of the maumau game
 type Game struct {
-	Stack         *CardStack
-	Heap          *CardStack
-	Players       []*Player
-	InitialEvents []Event
-	Events        []Event
-	NrCards       int
+	Stack   *CardStack
+	Heap    *CardStack
+	Players []*Player
+	Events  []Event
+	NrCards int
 }
 
 func newGame() *Game {
@@ -17,31 +17,33 @@ func newGame() *Game {
 	}
 }
 
+// Event takes an event and adds that to the game
+// to get a new state Init() has to be called
 func (g *Game) Event(e Event) {
 	g.Events = append(g.Events, e)
 }
-func (g *Game) InitialEvent(e Event) {
-	g.InitialEvents = append(g.InitialEvents, e)
-}
 
+// Init clears the internal state
 func (g *Game) Init() {
 	g.Stack = &CardStack{}
 	g.Heap = &CardStack{}
 	g.Players = []*Player{}
-
-	for _, e := range g.InitialEvents {
-		e(g)
-	}
 }
 
+// State executes all events and creates a new state for
+// the Stack, Heap and the Players
 func (g *Game) State() {
+	g.Init()
 	for _, e := range g.Events {
 		e(g)
 	}
 }
 
+// Event is a function, which takes a pointer to the game
+// When the game calculates the state all events are called
 type Event func(g *Game)
 
+// Player defines the properties of a Player
 type Player struct {
 	ID    string
 	Name  string

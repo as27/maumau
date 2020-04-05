@@ -28,13 +28,13 @@ func serveGame() Event {
 	}
 }
 
-func popCardFromStack(p *Player) Event {
+func takeCardFromStack(p *Player) Event {
 	return func(g *Game) {
 		p.Cards.push(g.Stack.pop())
 	}
 }
 
-func pushCardToHeap(p *Player, i int) Event {
+func playCardToHeap(p *Player, i int) Event {
 	return func(g *Game) {
 		g.Heap.push(p.Cards.take(i))
 	}
