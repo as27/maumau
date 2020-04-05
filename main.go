@@ -12,7 +12,7 @@ var (
 func main() {
 	flag.Parse()
 	s := newServer()
-	s.routes()
+	log.Println("Starting server at ", *flagPort)
 	err := s.run()
 	if err != nil {
 		log.Fatal("error main.s.run():", err)

@@ -103,6 +103,15 @@
             <div class="card yellow">5</div>
         </div>
     </div>
+    <script>
+        socket = new WebSocket("ws://localhost:2704/ws");
+    socket.onclose = function() {
+      alert("Connection has been closed.");
+    }
+    socket.onmessage = function(events) {
+        console.log(events.data);
+    }
+    </script>
 </body>
 
 </html>
