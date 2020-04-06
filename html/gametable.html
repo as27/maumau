@@ -2,6 +2,8 @@
 
 <head>
     <title>maumau</title>
+    <script type="text/javascript" src="test/player.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <style>
         body {
             background-color: beige;
@@ -78,39 +80,50 @@
 
 <body>
     <h1>maumau</h1>
-    <div class="player oponent">
-        <div class="cards">
-            <div class="card back"></div>
-            <div class="card back"></div>
-            <div class="card back"></div>
-            <div class="card back"></div>
-            <div class="card back"></div>
+    <div id="game">
+        <div class="player oponent">
+            <div class="cards">
+                <div class="card back"></div>
+                <div class="card back"></div>
+                <div class="card back"></div>
+                <div class="card back"></div>
+                <div class="card back"></div>
+            </div>
         </div>
-    </div>
-    <div class="game">
-        <div id="stack">
-            <div class="card back"></div>
+        <div class="game">
+            <div id="stack">
+                <div class="card back"></div>
+            </div>
+            <div id="stack">
+                <div class="card red">+2</div>
+            </div>
         </div>
-        <div id="stack">
-            <div class="card red">+2</div>
-        </div>
-    </div>
-    <div id="me" class="player">
-        <div class="cards">
-            <div class="card red">2</div>
-            <div class="card blue">3</div>
-            <div class="card green">4</div>
-            <div class="card yellow">5</div>
+        <div id="me" class="player">
+            <div class="cards">
+                <div class="card red" :id="card.id"  v-for="card in me.cards.cards" v-on:click="cardClick(card.id)">{{ card.value }}</div>
+              
+            </div>
         </div>
     </div>
     <script>
-        socket = new WebSocket("ws://localhost:2704/ws");
-    socket.onclose = function() {
-      alert("Connection has been closed.");
-    }
-    socket.onmessage = function(events) {
-        console.log(events.data);
-    }
+        /*socket = new WebSocket("ws://localhost:2704/ws");
+        socket.onclose = function () {
+            alert("Connection has been closed.");
+        }
+        socket.onmessage = function (events) {
+            console.log(events.data);
+        }*/
+        var app = new Vue({
+            el: '#game',
+            data: {
+                me: player,
+            },
+            methods: {
+                cardClick: function(event){
+                    console.log(event);
+                }
+            }
+        })
     </script>
 </body>
 

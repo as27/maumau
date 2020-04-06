@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 
@@ -10,6 +11,7 @@ import (
 
 func (s *server) routes() {
 	s.router.HandleFunc("/gamestate", s.handleGameState())
+	s.router.HandleFunc("/data", s.handleData())
 	s.router.HandleFunc("/ws", s.handleWS())
 	s.router.HandleFunc("/start", s.handleStart())
 	s.router.HandleFunc("/", s.handleRoot())
@@ -62,4 +64,41 @@ func (s *server) handleStart() http.HandlerFunc {
 		s.game.Event(addCardGameToStack(cardGame))
 		s.game.Event(serveGame())
 	}
+}
+
+func (s *server) handleData() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		u := r.URL
+		q := u.Query()
+		id, ok := q["id"]
+		if !ok {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, "No ID given")
+			return
+		}
+		//c, ok := s.getClient(id[0])
+		s.game.State()
+		p, ok := s.game.Player(id[0])
+		if !ok {
+			w.WriteHeader(http.StatusBadRequest)
+			io.WriteString(w, "Wrong ID")
+			log.Println("wrongID:", id[0])
+			return
+		}
+		enc := json.NewEncoder(w)
+		enc.SetIndent("", "  ")
+		err := enc.Encode(p)
+		if err != nil {
+			log.Println("error handleData() encoding: ", err)
+		}
+	}
+}
+
+func (s *server) getClient(id string) (*client, bool) {
+	for _, c := range s.clients {
+		if id == c.playerID {
+			return c, true
+		}
+	}
+	return nil, false
 }

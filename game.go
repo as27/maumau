@@ -41,6 +41,17 @@ func (g *Game) State() {
 	g.HeapHead = g.Heap.peek()
 }
 
+// Player returns the player matching to the given ID.
+// when no ID is availiable a nil pointer is returned.
+func (g *Game) Player(id string) (*Player, bool) {
+	for _, p := range g.Players {
+		if id == p.ID {
+			return p, true
+		}
+	}
+	return nil, false
+}
+
 // Event is a function, which takes a pointer to the game
 // When the game calculates the state all events are called
 type Event func(g *Game)
