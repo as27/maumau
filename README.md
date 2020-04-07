@@ -1,7 +1,10 @@
 # maumau
-Simples MauMau Spiel für mehrere Spieler.
+Simples MauMau Spiel für zwei Spieler.
 
-Das Spiel wird durch den Server verwaltet. Der Server stellt Websockets zur Verfügung und übermittelt darüber laufend den aktuellen Spielstand.
+![screenshot of v0.8](screenshots/maumau_v0_8.png)
+
+Dieses Spiel wurde im Zuge des Social Distancings entwickelt, sodass Kinder auch mit ihren Großeltern maumau spielen können. Das Spiel läuft auf einem Server, der über Websockets sich mit den Clients verbindet. 
+
 
 ## Definitionen
 
