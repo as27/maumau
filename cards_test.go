@@ -33,7 +33,13 @@ func TestCard_Check(t *testing.T) {
 		{
 			"wish card",
 			Card{Color: "red", Value: "10"},
-			args{next: Card{Color: "green", WishColor: true}},
+			args{next: Card{Color: "", WishColor: true}},
+			true,
+		},
+		{
+			"nach wish card",
+			Card{Color: "", Value: "", WishColor: true},
+			args{next: Card{Color: "green", Value: "5", WishColor: false}},
 			true,
 		},
 	}

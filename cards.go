@@ -68,7 +68,7 @@ type Card struct {
 // are allowed to play on every card.
 func (c Card) Check(next Card) bool {
 	switch {
-	case next.WishColor:
+	case next.WishColor || c.WishColor:
 		return true
 	case c.Color == next.Color:
 		return true

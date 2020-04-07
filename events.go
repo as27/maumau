@@ -39,6 +39,7 @@ func serveGame() Event {
 				g.Players[j].Cards.push(g.Stack.pop())
 			}
 		}
+		g.Heap.push(g.Stack.pop())
 	}
 }
 

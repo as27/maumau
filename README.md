@@ -18,7 +18,7 @@ Auf den Haufen werden die unterschiedlichen Karten abgelegt. Dabei dürfen nur b
 Für die Umsetzung werden verschiedene Events definiert. 
 
 - [x] newGame: Neues Spiel
-- [ ] Erste Karte Aufdecken
+- [x] Erste Karte Aufdecken
 - [x] newPlayer(name): Spieler hinzufügen
 - [x] pushCardToStack: Karte auf den Stapel legen (wird nach dem Mischen der Karten verwendet)
 - [ ] setActivePlayer: Spieler am Zug
@@ -34,10 +34,10 @@ Umsetzung erfolg über HTML
 - [x] HTML Template Struktur
 - [x] vue.js Rendering via JSON Input
 - [x] Anbindung an Wesocket
-- [ ] Abfangen von nicht gültigen Zügen
+- [x] Abfangen von nicht gültigen Zügen
 - [ ] Anmeldebildschirm
-- [ ] Undo und Redo
-- [ ] Neues Spiel
+- [x] Undo und Redo
+- [x] Neues Spiel
 
 Definition der einzelnen Phasen für den Client
 
@@ -51,6 +51,6 @@ Definition der einzelnen Phasen für den Client
 
 - [x] Game State für Spieler
 - [x] Game Start
-- [ ] Validierung der Züge 
+- [x] Validierung der Züge 
 - [x] Undo und Redo Handler
 - [x] Neues Spiel Handler

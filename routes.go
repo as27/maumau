@@ -195,6 +195,9 @@ func (s *server) handlePlayCard() http.HandlerFunc {
 			if !ok {
 				continue
 			}
+			if !s.game.HeapHead.Check(p.Cards.Cards[i]) {
+				return
+			}
 			s.game.Event(playCardToHeap(p, i))
 			w.WriteHeader(http.StatusOK)
 			io.WriteString(w, StatusCardPlayed)
