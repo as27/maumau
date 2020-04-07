@@ -53,4 +53,4 @@ Definition der einzelnen Phasen für den Client
 - [x] Game Start
 - [ ] Validierung der Züge 
 - [ ] Undo und Redo Handler
-- [ ] Neues Spiel Handler
+- [x] Neues Spiel Handler

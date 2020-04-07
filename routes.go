@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/httptest"
 
 	"github.com/gorilla/websocket"
 )
@@ -29,6 +30,7 @@ func (s *server) routes() {
 	s.router.HandleFunc("/start", s.handleStart())
 	s.router.HandleFunc("/playcard", s.handlePlayCard())
 	s.router.HandleFunc("/takecard", s.handleTakeCard())
+	s.router.HandleFunc("/newgame", s.handleNewGame())
 	s.router.HandleFunc("/", s.handleRoot())
 }
 
@@ -44,16 +46,24 @@ func (s *server) handleWS() http.HandlerFunc {
 			return
 		}
 		s.game.State()
-		player := newPlayer("")
-		// Don't add a third player
-		if len(s.game.Players) <= 2 {
-			s.game.Event(addPlayer(player))
-			log.Println("New Player:", player)
+		b := httptest.NewRecorder()
+		id, ok := s.handGetID(b, r)
+		if !ok {
+			// Don't add a third player
+			if len(s.game.Players) <= 2 {
+				player := newPlayer("")
+				s.game.Event(addPlayer(player))
+				id = player.ID
+				log.Println("New Player:", player)
+			}
 		}
+		// allow more client instances
+		// when there is a reload at the browser the id of the
+		// url is used to identify the user.
 		c := &client{
 			socket:   conn,
 			messages: make(chan []byte, 256), // message buffer 256 bytes
-			playerID: player.ID,
+			playerID: id,
 		}
 		s.clients = append(s.clients, c)
 		go c.write()
@@ -68,6 +78,24 @@ func (s *server) handleWS() http.HandlerFunc {
 		}
 	}
 }
+
+func (s *server) handleNewGame() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		s.game.Events = []Event{}
+		players := s.game.Players
+		s.game.Players = []*Player{}
+		for _, player := range players {
+			player.Cards = &CardStack{}
+			s.game.Event(addPlayer(player))
+		}
+		cardGame := CardGame()
+		cardGame.shuffle()
+		s.game.Event(addCardGameToStack(cardGame))
+		s.game.Event(serveGame())
+		s.sendState()
+	}
+}
+
 func (s *server) handleRoot() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "html/gametable.html")
