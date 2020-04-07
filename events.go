@@ -18,6 +18,15 @@ func addPlayer(p *Player) Event {
 	}
 }
 
+func nextPlayer() Event {
+	return func(g *Game) {
+		g.ActivePlayer++
+		if g.ActivePlayer > len(g.Players)-1 {
+			g.ActivePlayer = 0
+		}
+	}
+}
+
 // serveGame serves the cards from the stack to the players
 func serveGame() Event {
 	return func(g *Game) {

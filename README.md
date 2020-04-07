@@ -32,11 +32,25 @@ Für die Umsetzung werden verschiedene Events definiert.
 Umsetzung erfolg über HTML
 
 - [x] HTML Template Struktur
-- [ ] vue.js Rendering via JSON Input
-- [ ] Anbindung an Wesocket
+- [x] vue.js Rendering via JSON Input
+- [x] Anbindung an Wesocket
 - [ ] Abfangen von nicht gültigen Zügen
 - [ ] Anmeldebildschirm
+- [ ] Undo und Redo
+- [ ] Neues Spiel
+
+Definition der einzelnen Phasen für den Client
+
+- [ ] Status: Warte Anmeldung Partner
+- [ ] Status: Warte auf Zug
+- [ ] Status: Spiele Karte
+- [ ] Status: Nimm eine Karte
+- [ ] Status: Wähle Farbe
 
 ## Server
 
-- [ ] 
+- [x] Game State für Spieler
+- [x] Game Start
+- [ ] Validierung der Züge 
+- [ ] Undo und Redo Handler
+- [ ] Neues Spiel Handler

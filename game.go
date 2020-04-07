@@ -2,19 +2,21 @@ package main
 
 // Game defines the logic of the maumau game
 type Game struct {
-	Stack    *CardStack `json:"stack,omitempty"`
-	Heap     *CardStack `json:"heap,omitempty"`
-	HeapHead Card       `json:"heap_head,omitempty"`
-	Players  []*Player  `json:"players,omitempty"`
-	Events   []Event    `json:"-"`
-	NrCards  int        `json:"nr_cards,omitempty"`
+	Stack        *CardStack `json:"stack,omitempty"`
+	Heap         *CardStack `json:"heap,omitempty"`
+	HeapHead     Card       `json:"heap_head,omitempty"`
+	Players      []*Player  `json:"players,omitempty"`
+	Events       []Event    `json:"-"`
+	ActivePlayer int        `json:"active_player"`
+	NrCards      int        `json:"nr_cards,omitempty"`
 }
 
 func newGame() *Game {
 	return &Game{
-		Stack:   &CardStack{},
-		Heap:    &CardStack{},
-		NrCards: 6,
+		Stack:        &CardStack{},
+		Heap:         &CardStack{},
+		ActivePlayer: 0,
+		NrCards:      6,
 	}
 }
 

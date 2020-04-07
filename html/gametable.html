@@ -2,8 +2,9 @@
 
 <head>
     <title>maumau</title>
-    <script type="text/javascript" src="test/player.js"></script>
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         body {
             background-color: beige;
@@ -31,20 +32,24 @@
             box-shadow: 1px 1px 0.2em gray;
         }
 
-        .red {
+        .c1 {
             background-color: red;
         }
 
-        .blue {
+        .c2 {
             background-color: blue;
         }
 
-        .green {
+        .c3 {
             background-color: green;
         }
 
-        .yellow {
+        .c4 {
             background-color: goldenrod;
+        }
+
+        .wish {
+            background-image: repeating-linear-gradient(red, blue 22px, green 15px, goldenrod 44px);
         }
 
         .back {
@@ -83,47 +88,91 @@
     <div id="game">
         <div class="player oponent">
             <div class="cards">
-                <div class="card back"></div>
-                <div class="card back"></div>
-                <div class="card back"></div>
-                <div class="card back"></div>
-                <div class="card back"></div>
+                <div class="card" 
+                :class="card.color" 
+                :id="card.id" 
+                v-for="card in state.oponent[0].cards.cards"></div>
             </div>
         </div>
         <div class="game">
             <div id="stack">
-                <div class="card back"></div>
+                <div class="card back"
+                v-on:click="takeCard(state.player.id)"></div>
             </div>
             <div id="stack">
-                <div class="card red">+2</div>
+                <div class="card" :class="state.heap_head.color">
+                    {{ state.heap_head.value }}
+                </div>
             </div>
         </div>
         <div id="me" class="player">
             <div class="cards">
-                <div class="card red" :id="card.id"  v-for="card in me.cards.cards" v-on:click="cardClick(card.id)">{{ card.value }}</div>
-              
+                <div class="card" :class="card.color" :id="card.id" v-for="card in state.player.cards.cards"
+                    v-on:click="cardClick(card.id)">{{ card.value }}</div>
+
             </div>
         </div>
     </div>
     <script>
-        /*socket = new WebSocket("ws://localhost:2704/ws");
+
+        var app = new Vue({
+            el: '#game',
+            data: function () {
+                return {
+                    "state": {
+                        "player": {
+                            "id": "",
+                            "cards": {
+                                "cards": []
+                            }
+                        },
+                        "oponent": [{
+                            "cards": {
+                                "cards": []
+                            }
+                        }],
+                        "heap_head": {
+                            "color": "back",
+                            "value": "",
+                        }
+                    }
+                }
+            },
+            methods: {
+                cardClick: (event) => {
+                    id = event;
+                    axios.get('/playcard?id=' + id)
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                    console.log(event);
+                },
+                takeCard: (event) => {
+                    id = event;
+                    axios.get('/takecard?id=' + id)
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                }
+            }
+        })
+        socket = new WebSocket("ws://"+location.hostname+":"+location.port+"/ws");
         socket.onclose = function () {
             alert("Connection has been closed.");
         }
         socket.onmessage = function (events) {
-            console.log(events.data);
-        }*/
-        var app = new Vue({
-            el: '#game',
-            data: {
-                me: player,
-            },
-            methods: {
-                cardClick: function(event){
-                    console.log(event);
-                }
-            }
-        })
+            var d = JSON.parse(events.data);
+            console.log(d);
+            app.state = d;
+        }
     </script>
 </body>
 

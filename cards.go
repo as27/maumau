@@ -12,7 +12,7 @@ import (
 // Exept for the wish cards, every card needs a value and a color.
 func CardGame() *CardStack {
 	var cs CardStack
-	colors := []string{"rot", "gelb", "grün", "blau"}
+	colors := []string{"c1", "c2", "c3", "c4"}
 	values := []string{"1", "1", "2", "2", "3", "3", "4", "4", "5", "5"}
 	for _, c := range colors {
 		for _, v := range values {
@@ -45,6 +45,7 @@ func CardGame() *CardStack {
 		// wish cards don't need a color or value
 		newCard = Card{
 			ID:        uuid.New().String(),
+			Color:     "wish",
 			WishColor: true,
 		}
 		cs.push(newCard)
@@ -54,12 +55,12 @@ func CardGame() *CardStack {
 
 // Card defines the propperties of a card.
 type Card struct {
-	ID          string
-	Color       string
-	Value       string // number or name e.g. 1, K, J
-	SkipPlayers int
-	TakeN       int  // next player has to take this nr of cards
-	WishColor   bool // defines a wish card
+	ID          string `json:"id"`
+	Color       string `json:"color"`
+	Value       string `json:"value"` // number or name e.g. 1, K, J
+	SkipPlayers int    `json:"skip_players"`
+	TakeN       int    `json:"take_n"`     // next player has to take this nr of cards
+	WishColor   bool   `json:"wish_color"` // defines a wish card
 }
 
 // Check validates the next cards due to the rules of the game.
@@ -80,7 +81,7 @@ func (c Card) Check(next Card) bool {
 // CardStack defines a group of cards. The heap, the stack and the cards
 // a player has on his hand are defines as CardStack.
 type CardStack struct {
-	Cards []Card
+	Cards []Card `json:"cards"`
 }
 
 func (cs *CardStack) push(c Card) {
@@ -107,6 +108,19 @@ func (cs *CardStack) peek() Card {
 		return c
 	}
 	return cs.Cards[len(cs.Cards)-1]
+}
+
+// find returns the index of the card with a given
+// id. When that card is not inside the stack -1
+// is returned. To check the success use the second
+// ok parameter
+func (cs *CardStack) find(id string) (int, bool) {
+	for i, c := range cs.Cards {
+		if c.ID == id {
+			return i, true
+		}
+	}
+	return -1, false
 }
 
 // take returns the i element of the CardStack and removes
