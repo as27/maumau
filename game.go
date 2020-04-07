@@ -7,6 +7,7 @@ type Game struct {
 	HeapHead     Card       `json:"heap_head,omitempty"`
 	Players      []*Player  `json:"players,omitempty"`
 	Events       []Event    `json:"-"`
+	RedoEvents   []Event    `json:"-"`
 	ActivePlayer int        `json:"active_player"`
 	NrCards      int        `json:"nr_cards,omitempty"`
 }
@@ -23,6 +24,8 @@ func newGame() *Game {
 // Event takes an event and adds that to the game
 // to get a new state Init() has to be called
 func (g *Game) Event(e Event) {
+	// every new event clears the redo slice
+	g.RedoEvents = []Event{}
 	g.Events = append(g.Events, e)
 }
 

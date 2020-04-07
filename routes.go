@@ -31,6 +31,8 @@ func (s *server) routes() {
 	s.router.HandleFunc("/playcard", s.handlePlayCard())
 	s.router.HandleFunc("/takecard", s.handleTakeCard())
 	s.router.HandleFunc("/newgame", s.handleNewGame())
+	s.router.HandleFunc("/undo", s.handleUndo())
+	s.router.HandleFunc("/redo", s.handleRedo())
 	s.router.HandleFunc("/", s.handleRoot())
 }
 
@@ -93,6 +95,27 @@ func (s *server) handleNewGame() http.HandlerFunc {
 		s.game.Event(addCardGameToStack(cardGame))
 		s.game.Event(serveGame())
 		s.sendState()
+	}
+}
+
+func (s *server) handleUndo() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if len(s.game.Events) > 0 {
+			if len(s.game.RedoEvents) == 0 {
+				s.game.RedoEvents = s.game.Events
+			}
+			s.game.Events = s.game.Events[:len(s.game.Events)-1]
+			s.sendState()
+		}
+	}
+}
+
+func (s *server) handleRedo() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if len(s.game.Events) < len(s.game.RedoEvents) {
+			s.game.Events = append(s.game.Events, s.game.RedoEvents[len(s.game.Events)])
+			s.sendState()
+		}
 	}
 }
 
