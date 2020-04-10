@@ -85,6 +85,9 @@ func (s *server) playerState(id string) (PlayerState, bool) {
 		}
 	}
 	ps.HeapHead = s.game.HeapHead
+	// Just show the label for the HeapHead
+	// so  9 - 3 is shown instead of the value
+	ps.HeapHead.Value = ps.HeapHead.Label
 	return ps, found
 }
 

@@ -1,11 +1,28 @@
 package main
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+func createCalc(i int, max int) string {
+	a := rand.Intn(max)
+	s := ""
+	switch {
+	case a > i:
+		// minus
+		b := a - i
+		s = fmt.Sprintf("%d-%d", a, b)
+	case a <= i:
+		// plus
+		b := i - a
+		s = fmt.Sprintf("%d+%d", a, b)
+	}
+	return s
+}
 
 // CardGame defines all availiable cards inside the game.
 // This function is called to generate a stack for the game.
@@ -13,13 +30,21 @@ import (
 func CardGame() *CardStack {
 	var cs CardStack
 	colors := []string{"c1", "c2", "c3", "c4"}
-	values := []string{"1", "1", "2", "2", "3", "3", "4", "4", "5", "5"}
+	numbers := []int{1, 1, 2, 2, 3, 3, 4, 4, 5, 5}
+
 	for _, c := range colors {
-		for _, v := range values {
+		for _, n := range numbers {
+			var label string
+			if *flagCalc != 0 {
+				label = createCalc(n, *flagCalc)
+			} else {
+				label = fmt.Sprint(n)
+			}
 			newCard := Card{
 				ID:          uuid.New().String(),
 				Color:       c,
-				Value:       v,
+				Value:       fmt.Sprint(n),
+				Label:       label,
 				SkipPlayers: 0,
 				TakeN:       0,
 				WishColor:   false,
@@ -31,6 +56,7 @@ func CardGame() *CardStack {
 			ID:          uuid.New().String(),
 			Color:       c,
 			Value:       "->",
+			Label:       "->",
 			SkipPlayers: 1,
 		}
 		cs.push(newCard)
@@ -39,6 +65,7 @@ func CardGame() *CardStack {
 			ID:    uuid.New().String(),
 			Color: c,
 			Value: "+2",
+			Label: "+2",
 			TakeN: 2,
 		}
 		cs.push(newCard)
@@ -58,6 +85,7 @@ type Card struct {
 	ID          string `json:"id"`
 	Color       string `json:"color"`
 	Value       string `json:"value"` // number or name e.g. 1, K, J
+	Label       string `json:"label"` // some tasks for kids like 1+1
 	SkipPlayers int    `json:"skip_players"`
 	TakeN       int    `json:"take_n"`     // next player has to take this nr of cards
 	WishColor   bool   `json:"wish_color"` // defines a wish card

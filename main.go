@@ -7,6 +7,7 @@ import (
 
 var (
 	flagPort = flag.String("p", ":2704", "Port für den Server")
+	flagCalc = flag.Int("c", 0, "Erstellt für die Ablage eine Rechenaufgabe mit dem Zahlenraum der über dieses Flag definiert wird.")
 )
 
 func main() {
