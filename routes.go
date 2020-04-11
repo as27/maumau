@@ -32,7 +32,8 @@ func (s *server) routes() {
 	s.router.HandleFunc("/undo", s.handleUndo())
 	s.router.HandleFunc("/redo", s.handleRedo())
 	s.router.HandleFunc("/ws/", s.handleWS())
-	s.router.HandleFunc("/", s.handleRoot())
+	s.router.HandleFunc("/game", s.handleGame())
+	s.router.HandleFunc("/", s.handleLogin())
 }
 
 func (s *server) handleWS() http.HandlerFunc {
@@ -120,9 +121,15 @@ func (s *server) handleRedo() http.HandlerFunc {
 	}
 }
 
-func (s *server) handleRoot() http.HandlerFunc {
+func (s *server) handleGame() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "html/gametable.html")
+	}
+}
+
+func (s *server) handleLogin() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "html/login.html")
 	}
 }
 

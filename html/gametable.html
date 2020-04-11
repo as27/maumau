@@ -80,6 +80,7 @@
             display: block;
             clear: left;
         }
+
         .button {
             display: block;
             float: left;
@@ -95,6 +96,12 @@
             border-radius: 5%;
             box-shadow: 0.2em 0.2em 0.4em gray;
         }
+
+        .button:hover {
+            box-shadow: 0.01em 0.01em 0.2em gray;
+            color: black;
+            background-color: lightgray;
+        }
     </style>
 </head>
 
@@ -103,16 +110,12 @@
     <div id="game">
         <div class="player oponent">
             <div class="cards">
-                <div class="card" 
-                :class="card.color" 
-                :id="card.id" 
-                v-for="card in state.oponent[0].cards.cards"></div>
+                <div class="card" :class="card.color" :id="card.id" v-for="card in state.oponent[0].cards.cards"></div>
             </div>
         </div>
         <div class="game">
             <div id="stack">
-                <div class="card back"
-                v-on:click="takeCard(state.player.id)"></div>
+                <div class="card back" v-on:click="takeCard(state.player.id)"></div>
             </div>
             <div id="stack">
                 <div class="card" :class="state.heap_head.color">
@@ -219,7 +222,7 @@
         })
         var u = new URL(location.href);
         var id = u.searchParams.get("id");
-        socket = new WebSocket("ws://"+location.hostname+":"+location.port+"/ws/"+id);
+        socket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/ws/" + id);
         socket.onclose = function () {
             alert("Connection has been closed.");
         }
