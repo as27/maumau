@@ -1,7 +1,5 @@
 package main
 
-import "github.com/google/uuid"
-
 // Player defines the properties of a Player
 type Player struct {
 	ID    string     `json:"id"`
@@ -11,7 +9,8 @@ type Player struct {
 
 func newPlayer(name string) *Player {
 	return &Player{
-		ID:    uuid.New().String(),
+		//ID:    uuid.New().String(),
+		ID:    name,
 		Name:  name,
 		Cards: &CardStack{},
 	}

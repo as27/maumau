@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"net/http/httptest"
 
 	"github.com/gorilla/websocket"
 )
@@ -26,13 +25,13 @@ const (
 func (s *server) routes() {
 	s.router.HandleFunc("/gamestate", s.handleGameState())
 	s.router.HandleFunc("/data", s.handleData())
-	s.router.HandleFunc("/ws", s.handleWS())
 	s.router.HandleFunc("/start", s.handleStart())
 	s.router.HandleFunc("/playcard", s.handlePlayCard())
 	s.router.HandleFunc("/takecard", s.handleTakeCard())
 	s.router.HandleFunc("/newgame", s.handleNewGame())
 	s.router.HandleFunc("/undo", s.handleUndo())
 	s.router.HandleFunc("/redo", s.handleRedo())
+	s.router.HandleFunc("/ws/", s.handleWS())
 	s.router.HandleFunc("/", s.handleRoot())
 }
 
@@ -48,17 +47,19 @@ func (s *server) handleWS() http.HandlerFunc {
 			return
 		}
 		s.game.State()
-		b := httptest.NewRecorder()
-		id, ok := s.handGetID(b, r)
-		if !ok {
-			// Don't add a third player
-			if len(s.game.Players) <= 2 {
-				player := newPlayer("")
-				s.game.Event(addPlayer(player))
-				id = player.ID
-				log.Println("New Player:", player)
-			}
+		id := ""
+		if len(r.URL.Path) > 4 {
+			id = r.URL.Path[4:]
 		}
+		player, ok := s.game.Player(id)
+		// Don't add a third player
+		if len(s.game.Players) <= 2 && !ok {
+			player = newPlayer(id)
+			s.game.Event(addPlayer(player))
+			id = player.ID
+			log.Println("New Player:", player)
+		}
+
 		// allow more client instances
 		// when there is a reload at the browser the id of the
 		// url is used to identify the user.
