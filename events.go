@@ -54,3 +54,9 @@ func playCardToHeap(p *Player, i int) Event {
 		g.Heap.push(p.Cards.take(i))
 	}
 }
+
+func removeCardsFromHeap() Event {
+	return func(g *Game) {
+		g.Heap.Cards = []Card{g.Heap.peek()}
+	}
+}

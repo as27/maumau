@@ -229,6 +229,16 @@ func (s *server) handleTakeCard() http.HandlerFunc {
 			io.WriteString(w, StatusPlayerNotFound)
 			return
 		}
+		if s.game.Stack.len() == 0 {
+			oldCards := &CardStack{}
+			// move all cards from the heap to oldCards
+			for s.game.Heap.len() > 1 {
+				oldCards.push(s.game.Heap.pop())
+			}
+			oldCards.shuffle()
+			s.game.Event(removeCardsFromHeap())
+			s.game.Event(addCardGameToStack(oldCards))
+		}
 		s.game.Event(takeCardFromStack(p))
 		s.sendState()
 	}
