@@ -68,6 +68,9 @@ func (s *server) playerState(id string) (PlayerState, bool) {
 		switch p.ID {
 		case id:
 			ps.Player = *p
+			if p.Active {
+				ps.Player.Class = "active"
+			}
 			found = true
 		default:
 			// Hide oponent cards and id
@@ -77,6 +80,9 @@ func (s *server) playerState(id string) (PlayerState, bool) {
 				Cards: &CardStack{
 					Cards: make([]Card, len(p.Cards.Cards)),
 				},
+			}
+			if p.Active {
+				oponent.Class = "active"
 			}
 			for i := range p.Cards.Cards {
 				oponent.Cards.Cards[i].Color = "back"

@@ -57,6 +57,50 @@ func (g *Game) Player(id string) (*Player, bool) {
 	return nil, false
 }
 
+// NextPlayer takes the current player ID and returns the
+// next player at the table. If there is no ID a nil pointer
+// is returned
+func (g *Game) NextPlayer(id string) (*Player, bool) {
+	found := -1
+	// index of the current player
+	for i, p := range g.Players {
+		if id == p.ID {
+			found = i
+			break
+		}
+	}
+	if found == -1 {
+		return nil, false
+	}
+	next := found + 1
+	if len(g.Players)-1 == found {
+		// if current player is the last in the slice
+		// the first player is next
+		next = 0
+	}
+	return g.Players[next], true
+}
+
+// SetActivePlayer takes an ID to set the active player
+// all other players will set es not active.
+// if there is no ID, false ist returned
+func (g *Game) SetActivePlayer(id string) bool {
+	// first check if there is a player to the id
+	// if not nothing should be changed.
+	_, ok := g.Player(id)
+	if !ok {
+		return false
+	}
+	for _, p := range g.Players {
+		if id == p.ID {
+			p.Active = true
+		} else {
+			p.Active = false
+		}
+	}
+	return true
+}
+
 // Event is a function, which takes a pointer to the game
 // When the game calculates the state all events are called
 type Event func(g *Game)

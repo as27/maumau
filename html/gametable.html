@@ -61,7 +61,11 @@
             box-shadow: 0.4em 0.4em 0.8em gray;
             border: 0.5em solid tan;
             margin: 1.5em 0;
+            background-color: rgb(226, 195, 182);
+        }
 
+        .active {
+            background-color: rgb(201, 219, 183);
         }
 
         .game {
@@ -108,7 +112,7 @@
 <body>
     <h1>maumau</h1>
     <div id="game">
-        <div class="player oponent">
+        <div class="player oponent" :class="state.oponent[0].class">
             <div class="cards">
                 <div class="card" :class="card.color" :id="card.id" v-for="card in state.oponent[0].cards.cards"></div>
             </div>
@@ -123,12 +127,13 @@
                 </div>
             </div>
         </div>
-        <div id="me" class="player">
+        <div id="me" class="player" :class="state.player.class">
             <div class="cards">
                 <div class="card" :class="card.color" :id="card.id" v-for="card in state.player.cards.cards"
                     v-on:click="cardClick(card.id)">{{ card.value }}</div>
-
             </div>
+            <br>
+            <div class="button" v-on:click="next(state.player.id)">weiter</div>
         </div>
         <div id="controller">
             <div class="button" v-on:click="newGame">Neues Spiel</div>
@@ -147,12 +152,14 @@
                             "id": "",
                             "cards": {
                                 "cards": []
-                            }
+                            },
+                            "class": ""
                         },
                         "oponent": [{
                             "cards": {
                                 "cards": []
-                            }
+                            },
+                            "class": ""
                         }],
                         "heap_head": {
                             "color": "back",
@@ -162,6 +169,18 @@
                 }
             },
             methods: {
+                next: (event) => {
+                    id = event;
+                    axios.get('/next?id=' + id)
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                    console.log(event);
+                },
                 cardClick: (event) => {
                     id = event;
                     axios.get('/playcard?id=' + id)

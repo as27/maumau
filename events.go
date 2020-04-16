@@ -33,6 +33,7 @@ func serveGame() Event {
 		// a new emtpy hand for every player
 		for _, p := range g.Players {
 			p.Cards = &CardStack{Cards: []Card{}}
+			p.Active = true
 		}
 		for i := 1; i <= g.NrCards; i++ {
 			for j := range g.Players {
@@ -52,11 +53,24 @@ func takeCardFromStack(p *Player) Event {
 func playCardToHeap(p *Player, i int) Event {
 	return func(g *Game) {
 		g.Heap.push(p.Cards.take(i))
+		head := g.Heap.peek()
+		next, _ := g.NextPlayer(p.ID)
+		for i := 0; i < head.SkipPlayers; i++ {
+			next, _ = g.NextPlayer(next.ID)
+		}
+		g.SetActivePlayer(next.ID)
 	}
 }
 
 func removeCardsFromHeap() Event {
 	return func(g *Game) {
 		g.Heap.Cards = []Card{g.Heap.peek()}
+	}
+}
+
+func setNextPlayer(p *Player) Event {
+	return func(g *Game) {
+		next, _ := g.NextPlayer(p.ID)
+		g.SetActivePlayer(next.ID)
 	}
 }

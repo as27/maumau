@@ -28,6 +28,7 @@ func (s *server) routes() {
 	s.router.HandleFunc("/start", s.handleStart())
 	s.router.HandleFunc("/playcard", s.handlePlayCard())
 	s.router.HandleFunc("/takecard", s.handleTakeCard())
+	s.router.HandleFunc("/next", s.handleNextPlayer())
 	s.router.HandleFunc("/newgame", s.handleNewGame())
 	s.router.HandleFunc("/undo", s.handleUndo())
 	s.router.HandleFunc("/redo", s.handleRedo())
@@ -206,6 +207,10 @@ func (s *server) handlePlayCard() http.HandlerFunc {
 			if !s.game.HeapHead.Check(p.Cards.Cards[i]) {
 				return
 			}
+			// check if player is active
+			if !p.Active {
+				return
+			}
 			s.game.Event(playCardToHeap(p, i))
 			w.WriteHeader(http.StatusOK)
 			io.WriteString(w, StatusCardPlayed)
@@ -214,6 +219,28 @@ func (s *server) handlePlayCard() http.HandlerFunc {
 		}
 		w.WriteHeader(http.StatusNotFound)
 		io.WriteString(w, StatusCardNotFound)
+	}
+}
+
+func (s *server) handleNextPlayer() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// check if there is an id in the url
+		id, ok := s.handGetID(w, r)
+		if !ok {
+			return
+		}
+		log.Println(id)
+		// check the player id
+		s.game.State()
+		p, ok := s.game.Player(id)
+		if !ok {
+			return
+		}
+		// check if the player is active
+		if p.Active {
+			s.game.Event(setNextPlayer(p))
+		}
+		s.sendState()
 	}
 }
 
