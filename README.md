@@ -24,8 +24,8 @@ Für die Umsetzung werden verschiedene Events definiert.
 - [x] Erste Karte Aufdecken
 - [x] newPlayer(name): Spieler hinzufügen
 - [x] pushCardToStack: Karte auf den Stapel legen (wird nach dem Mischen der Karten verwendet)
-- [ ] setActivePlayer: Spieler am Zug
-- [ ] playerReady: Spieler ist fertig mit dem Zug
+- [x] setActivePlayer: Spieler am Zug
+- [x] playerReady: Spieler ist fertig mit dem Zug
 - [x] popCardFromStack: Spieler nimmt oberste Karte vom Stapel
 - [x] pushCardToHeap: Spieler legt Karte auf den Haufen
 - [ ] gameOver: Spieler hat gewonnen
@@ -38,7 +38,7 @@ Umsetzung erfolg über HTML
 - [x] vue.js Rendering via JSON Input
 - [x] Anbindung an Wesocket
 - [x] Abfangen von nicht gültigen Zügen
-- [ ] Anmeldebildschirm
+- [x] Anmeldebildschirm
 - [x] Undo und Redo
 - [x] Neues Spiel
 

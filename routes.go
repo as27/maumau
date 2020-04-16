@@ -53,6 +53,7 @@ func (s *server) handleWS() http.HandlerFunc {
 		if len(r.URL.Path) > 4 {
 			id = r.URL.Path[4:]
 		}
+		startGame := false
 		player, ok := s.game.Player(id)
 		// Don't add a third player
 		if len(s.game.Players) <= 2 && !ok {
@@ -60,6 +61,7 @@ func (s *server) handleWS() http.HandlerFunc {
 			s.game.Event(addPlayer(player))
 			id = player.ID
 			log.Println("New Player:", player)
+			startGame = true
 		}
 
 		// allow more client instances
@@ -73,14 +75,14 @@ func (s *server) handleWS() http.HandlerFunc {
 		s.clients = append(s.clients, c)
 		go c.write()
 		s.game.State()
-		if len(s.game.Players) == 2 {
+		if len(s.game.Players) == 2 && startGame {
 			// Start game
 			cardGame := CardGame()
 			cardGame.shuffle()
 			s.game.Event(addCardGameToStack(cardGame))
 			s.game.Event(serveGame())
-			s.sendState()
 		}
+		s.sendState()
 	}
 }
 
