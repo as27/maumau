@@ -5,7 +5,6 @@ type Game struct {
 	GameState
 	Events     []Event `json:"-"`
 	RedoEvents []Event `json:"-"`
-	NrCards    int     `json:"nr_cards,omitempty"`
 }
 
 // GameState includes all properties of the game, which are having
@@ -16,6 +15,7 @@ type GameState struct {
 	HeapHead     Card       `json:"heap_head,omitempty"`
 	Players      []*Player  `json:"players,omitempty"`
 	ActivePlayer int        `json:"active_player"`
+	NrCards      int        `json:"nr_cards,omitempty"`
 }
 
 func newGame() *Game {
@@ -24,8 +24,8 @@ func newGame() *Game {
 			Stack:        &CardStack{},
 			Heap:         &CardStack{},
 			ActivePlayer: 0,
+			NrCards:      6,
 		},
-		NrCards: 6,
 	}
 }
 
@@ -49,14 +49,14 @@ func (g *Game) Init() {
 func (g *Game) State() {
 	g.Init()
 	for _, e := range g.Events {
-		e(g)
+		e(&g.GameState)
 	}
 	g.HeapHead = g.Heap.peek()
 }
 
 // Player returns the player matching to the given ID.
 // when no ID is availiable a nil pointer is returned.
-func (g *Game) Player(id string) (*Player, bool) {
+func (g *GameState) Player(id string) (*Player, bool) {
 	for _, p := range g.Players {
 		if id == p.ID {
 			return p, true
@@ -68,7 +68,7 @@ func (g *Game) Player(id string) (*Player, bool) {
 // NextPlayer takes the current player ID and returns the
 // next player at the table. If there is no ID a nil pointer
 // is returned
-func (g *Game) NextPlayer(id string) (*Player, bool) {
+func (g *GameState) NextPlayer(id string) (*Player, bool) {
 	found := -1
 	// index of the current player
 	for i, p := range g.Players {
@@ -92,7 +92,7 @@ func (g *Game) NextPlayer(id string) (*Player, bool) {
 // SetActivePlayer takes an ID to set the active player
 // all other players will set es not active.
 // if there is no ID, false ist returned
-func (g *Game) SetActivePlayer(id string) bool {
+func (g *GameState) SetActivePlayer(id string) bool {
 	// first check if there is a player to the id
 	// if not nothing should be changed.
 	_, ok := g.Player(id)
@@ -111,4 +111,4 @@ func (g *Game) SetActivePlayer(id string) bool {
 
 // Event is a function, which takes a pointer to the game
 // When the game calculates the state all events are called
-type Event func(g *Game)
+type Event func(g *GameState)
