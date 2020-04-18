@@ -231,7 +231,6 @@ func (s *server) handleNextPlayer() http.HandlerFunc {
 		if !ok {
 			return
 		}
-		log.Println(id)
 		// check the player id
 		s.game.State()
 		p, ok := s.game.Player(id)
