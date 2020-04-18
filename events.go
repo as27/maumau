@@ -3,13 +3,13 @@ package main
 import "github.com/google/uuid"
 
 func addCardGameToStack(cs *CardStack) Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		g.Stack.Cards = append(cs.Cards, g.Stack.Cards...)
 	}
 }
 
 func addPlayer(p *Player) Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		p.Cards = &CardStack{}
 		if p.ID == "" {
 			p.ID = uuid.New().String()
@@ -19,7 +19,7 @@ func addPlayer(p *Player) Event {
 }
 
 func nextPlayer() Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		g.ActivePlayer++
 		if g.ActivePlayer > len(g.Players)-1 {
 			g.ActivePlayer = 0
@@ -29,7 +29,7 @@ func nextPlayer() Event {
 
 // serveGame serves the cards from the stack to the players
 func serveGame() Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		// a new emtpy hand for every player
 		for _, p := range g.Players {
 			p.Cards = &CardStack{Cards: []Card{}}
@@ -45,13 +45,13 @@ func serveGame() Event {
 }
 
 func takeCardFromStack(p *Player) Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		p.Cards.push(g.Stack.pop())
 	}
 }
 
 func playCardToHeap(p *Player, i int) Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		g.Heap.push(p.Cards.take(i))
 		head := g.Heap.peek()
 		next, _ := g.NextPlayer(p.ID)
@@ -63,13 +63,13 @@ func playCardToHeap(p *Player, i int) Event {
 }
 
 func removeCardsFromHeap() Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		g.Heap.Cards = []Card{g.Heap.peek()}
 	}
 }
 
 func setNextPlayer(p *Player) Event {
-	return func(g *Game) {
+	return func(g *GameState) {
 		next, _ := g.NextPlayer(p.ID)
 		g.SetActivePlayer(next.ID)
 	}
