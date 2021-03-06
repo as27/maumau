@@ -241,7 +241,9 @@
         })
         var u = new URL(location.href);
         var id = u.searchParams.get("id");
-        socket = new WebSocket("ws://" + location.hostname + ":" + location.port + "/ws/" + id);
+        
+        sockprotocol = (u.protocol=="http:") ? "ws://" : "wss://";
+        socket = new WebSocket(sockprotocol + location.hostname + ":" + location.port + "/ws/" + id);
         socket.onclose = function () {
             alert("Connection has been closed.");
         }
