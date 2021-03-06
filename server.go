@@ -96,9 +96,3 @@ func (s *server) playerState(id string) (PlayerState, bool) {
 	ps.HeapHead.Value = ps.HeapHead.Label
 	return ps, found
 }
-
-func (s *server) runGame() {
-	for {
-
-	}
-}

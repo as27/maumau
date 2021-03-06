@@ -57,3 +57,7 @@ Definition der einzelnen Phasen für den Client
 - [x] Validierung der Züge 
 - [x] Undo und Redo Handler
 - [x] Neues Spiel Handler
+
+## embed-Erweiterung
+
+Im Zuge von Go 1.16 wurden alle lokalen HTML-Files nun mittels embed-Paket in das Binary aufgenommen.

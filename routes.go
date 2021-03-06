@@ -1,13 +1,18 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
 )
+
+//go:embed html/*
+var htmlFiles embed.FS
 
 /*
 Status X00 - X49 are success messages
@@ -126,13 +131,19 @@ func (s *server) handleRedo() http.HandlerFunc {
 
 func (s *server) handleGame() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "html/gametable.html")
+		err := serveFile(w, htmlFiles, "html/gametable.html")
+		if err != nil {
+			log.Println("handleGame: ", err)
+		}
 	}
 }
 
 func (s *server) handleLogin() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "html/login.html")
+		err := serveFile(w, htmlFiles, "html/login.html")
+		if err != nil {
+			log.Println("handleLogin: ", err)
+		}
 	}
 }
 
@@ -279,4 +290,17 @@ func (s *server) getClient(id string) (*client, bool) {
 		}
 	}
 	return nil, false
+}
+
+func serveFile(w io.Writer, fs embed.FS, name string) error {
+	f, err := fs.Open(name)
+	if err != nil {
+		return fmt.Errorf("serverFile(w,fs, %s) Open: %w", name, err)
+	}
+	_, err = io.Copy(w, f)
+	if err != nil {
+		return fmt.Errorf("serverFile(w,fs, %s) Copy: %w", name, err)
+	}
+	f.Close()
+	return nil
 }
